@@ -19,3 +19,12 @@ resource "aws_instance" "my_server1" {
     Name = "instance324"
   }
 }  
+
+resource "aws_vpc" "sahil81" {
+  cidr_block       = "10.0.0.0/16"
+  instance_tenancy = "default"
+
+  tags = {
+    Name = "test-terrafrm"
+  }
+}

@@ -16,15 +16,15 @@ resource "aws_instance" "my_server1" {
   instance_type = "t2.micro"
 
   tags = {
-    Name = "instance324"
+    Name = "instance3124"
   }
 }  
 
-resource "aws_vpc" "sahil811" {
+resource "aws_vpc" "sahil8113" {
   cidr_block       = "10.0.0.0/16"
   instance_tenancy = "default"
 
   tags = {
-    Name = "test-terraform"
+    Name = "testing-terraform"
   }
 }

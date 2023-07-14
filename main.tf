@@ -8,6 +8,10 @@ terraform {
   }
 }
 
+# Configure the AWS Provider
+provider "aws" {
+  region = "us-east-1"
+}
 #aws vpc creation
 
 resource "aws_vpc" "terraform" {

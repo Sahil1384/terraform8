@@ -1,51 +1,70 @@
+#provider
+
 terraform {
   required_providers {
     aws = {
       source = "hashicorp/aws"
-      version = "5.6.2"
+      version = "5.8.0"
     }
   }
 }
- 
-provider "aws" {
-  region  = "us-east-1"
+
+#aws vpc creation
+
+resource "aws_vpc" "terraform" {
+  cidr_block = "10.0.0.0/16"
 }
 
-resource "aws_instance" "my_server1" {
-  ami           = "ami-04823729c75214919"
-  instance_type = "t2.micro"
+# aws subnet creation
+
+resource "aws_subnet" "terraform" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "10.0.0.0/24"
 
   tags = {
-    Name = "instance3124"
-  }
-}  
-
-resource "aws_vpc" "sahil8113" {
-  cidr_block       = "10.0.0.0/16"
-  instance_tenancy = "default"
-
-  tags = {
-    Name = "testing-terraform"
+    Name = "terraform_sub"
   }
 }
 
-resource "aws_security_group" "sahil_sg" {
-  name        = "sahil-security-group"
-  description = "for testing"
+#aws internet-gateway
 
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+resource "aws_internet_gateway" "terraform-igw" {
+  vpc_id = aws_vpc.terraform
+
+  tags = {
+    Name = "terraform-igw"
   }
+}
+#internet gateway attachment
 
-  ingress {
+resource "aws_internet_gateway_attachment" "terraform-igw" {
+  internet_gateway_id = aws_internet_gateway.terraform-igw
+  vpc_id              = aws_vpc.terraform
+}
+
+
+resource "aws_internet_gateway" "terraform-igw" {}
+
+#aws security group
+
+resource "aws_security_group" "terraform_grp" {
+  name        = "terraform_grp"
+  description = "for testing using terraform"
+  vpc_id      = aws_vpc.main.id
+
+   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-  }
+   }
+
+   ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+   }
 
   egress {
     from_port   = 0
@@ -53,4 +72,17 @@ resource "aws_security_group" "sahil_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  tags = {
+    Name = "allow_this"
+  }
+}
+
+# aws instance 
+
+resource "aws_instance" "terraform32" {
+  ami           = "ami-04823729c75214919"  # Replace with your desired AMI ID
+  instance_type = "t2.micro"  # Replace with your desired instance type
+  subnet_id     = aws_subnet.terraform
+  security_group_ids = [aws_security_group.terraform_grp]
 }

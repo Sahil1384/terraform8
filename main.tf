@@ -43,8 +43,6 @@ resource "aws_internet_gateway_attachment" "terraform-igw" {
 }
 
 
-resource "aws_internet_gateway" "terraform-igw" {}
-
 #aws security group
 
 resource "aws_security_group" "terraform_grp" {

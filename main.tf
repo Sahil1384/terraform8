@@ -30,6 +30,15 @@ resource "aws_subnet" "terraform23" {
   }
 }
 
+resource "aws_subnet" "terraform24" {
+  vpc_id     = aws_vpc.terraform.id
+  cidr_block = "10.0.1.0/24"
+
+  tags = {
+    Name = "terraform-prvt-subnet"
+  }
+}
+
 #aws internet-gateway
 
 resource "aws_internet_gateway" "terraform-igw" {
@@ -38,6 +47,23 @@ resource "aws_internet_gateway" "terraform-igw" {
   tags = {
     Name = "terraform-igw"
   }
+}
+#aws nat_gateway
+
+resource "aws_nat_gateway" "nat-gw" {
+  #the allocation id of elastic ip address for the gateway. 
+  allocation_id = aws_eip.example.id
+  #the subnet id of the subnet in which to place the gateway.
+  subnet_id     = aws_subnet.terraform24.id
+
+  tags = {
+    Name = "NAT-gw"
+  }
+}
+#aws elastic ip
+
+resource "aws_eip" "elastic_ip" {
+  depends_on = [aws_internet_gateway.terraform-igw]
 }
 #internet gateway attachment 
 /*resource "aws_internet_gateway_attachment" "terraform-igw-jass" {

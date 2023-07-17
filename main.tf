@@ -33,18 +33,17 @@ resource "aws_subnet" "terraform23" {
 #aws internet-gateway
 
 resource "aws_internet_gateway" "terraform-igw" {
-  #vpc_id = aws_vpc.terraform.id
+  vpc_id = aws_vpc.terraform.id
 
   tags = {
     Name = "terraform-igw"
   }
 }
-#internet gateway attachment
-
-resource "aws_internet_gateway_attachment" "terraform-igw-jass" {
-  internet_gateway_id = aws_internet_gateway.terraform-igw.id
+#internet gateway attachment 
+/*resource "aws_internet_gateway_attachment" "terraform-igw-jass" {
+ internet_gateway_id = aws_internet_gateway.terraform-igw.id
   vpc_id              = aws_vpc.terraform.id
-}
+}*/
 
 
 #aws security group

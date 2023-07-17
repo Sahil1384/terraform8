@@ -1,4 +1,4 @@
-#pro
+#provider
 terraform {
   required_providers {
     aws = {
@@ -12,6 +12,7 @@ terraform {
 provider "aws" {
   region = "us-east-1"
 }
+
 #aws vpc creation
 
 resource "aws_vpc" "terraform" {
@@ -20,7 +21,7 @@ resource "aws_vpc" "terraform" {
 
 # aws subnet creation
 
-resource "aws_subnet" "terraform" {
+resource "aws_subnet" "terraform23" {
   vpc_id     = aws_vpc.terraform.id
   cidr_block = "10.0.0.0/24"
 
@@ -78,6 +79,31 @@ resource "aws_security_group" "terraform_grp" {
     Name = "allow_this"
   }
 }
+
+resource "aws_route_table" "route498" {
+  #The vpc id.
+  vpc_id = aws_vpc.terraform.id
+
+  route {
+    #The cidr block of the route
+    cidr_block = "0.0.0.0/0"
+    #identifier of vpc internet gateway 
+    gateway_id = aws_internet_gateway.terraform-igw.id
+  }
+
+   
+  tags = {
+    Name = "public"
+  }
+}
+
+#route table association
+
+resource "aws_route_table_association" "routeroute498" {
+  subnet_id      = aws_subnet.terraform23.id
+  route_table_id = aws_route_table.route498.id
+}
+
 
 # aws instance 
 /*

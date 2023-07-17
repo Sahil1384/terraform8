@@ -41,7 +41,7 @@ resource "aws_internet_gateway" "terraform-igw" {
 }
 #internet gateway attachment
 
-resource "aws_internet_gateway_attachment" "terraform-igw" {
+resource "aws_internet_gateway_attachment" "terraform-igw-jass" {
   internet_gateway_id = aws_internet_gateway.terraform-igw.id
   vpc_id              = aws_vpc.terraform.id
 }

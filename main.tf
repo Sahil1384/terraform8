@@ -52,7 +52,7 @@ resource "aws_internet_gateway" "terraform-igw" {
 
 resource "aws_nat_gateway" "nat-gw" {
   #the allocation id of elastic ip address for the gateway. 
-  allocation_id = aws_eip.example.id
+  allocation_id = aws_eip.elastic_ip.id
   #the subnet id of the subnet in which to place the gateway.
   subnet_id     = aws_subnet.terraform24.id
 

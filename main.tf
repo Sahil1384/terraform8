@@ -109,7 +109,7 @@ resource "aws_security_group" "terraform_grp" {
   }
 }
 
-resource "aws_route_table" "route498" {
+resource "aws_route_table" "public" {
   #The vpc id.
   vpc_id = aws_vpc.terraform.id
 
@@ -119,7 +119,7 @@ resource "aws_route_table" "route498" {
     #identifier of vpc internet gateway 
     gateway_id = aws_internet_gateway.terraform-igw.id
 
-    nat_gateway_id = aws_nat_gateway.nat-gw.id
+    
   }
 
    
@@ -128,11 +128,37 @@ resource "aws_route_table" "route498" {
   }
 }
 
+resource "aws_route_table" "private" {
+  #The vpc id.
+  vpc_id = aws_vpc.terraform.id
+
+  route {
+    #The cidr block of the route
+    cidr_block = "0.0.0.0/0"
+    #identifier of vpc internet gateway 
+    nat_gateway_id = aws_nat_gateway.nat-gw.id
+
+    
+  }
+
+   
+  tags = {
+    Name = "private"
+  }
+}
+
 #route table association
 
-resource "aws_route_table_association" "routeroute498" {
+resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.terraform23.id
-  route_table_id = aws_route_table.route498.id
+  route_table_id = aws_route_table.public.id
+}
+
+#route table association for private 
+
+resource "aws_route_table_association" "private" {
+  subnet_id      = aws_subnet.terraform24.id
+  route_table_id = aws_route_table.private.id
 }
 
 

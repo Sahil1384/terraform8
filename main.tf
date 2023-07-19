@@ -58,7 +58,7 @@ resource "aws_nat_gateway" "nat-gw" {
   #the allocation id of elastic ip address for the gateway. 
   allocation_id = aws_eip.elastic_ip.id
   #the subnet id of the subnet in which to place the gateway.
-  subnet_id     = aws_subnet.terraform24.id
+  subnet_id     = aws_subnet.terraform243.id
 
   tags = {
     Name = "NAT-gw"
@@ -118,6 +118,8 @@ resource "aws_route_table" "route498" {
     cidr_block = "0.0.0.0/0"
     #identifier of vpc internet gateway 
     gateway_id = aws_internet_gateway.terraform-igw.id
+
+    nat_gateway_id = aws_nat_gateway.nat-gw.id
   }
 
    

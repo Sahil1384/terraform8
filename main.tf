@@ -173,7 +173,7 @@ resource "taws_key_pair" "terraform-key" {
 }
 
 # aws instance 
-
+/*
 resource "aws_instance" "terraform32" {
   ami           = "ami-04823729c75214919"  # Replace with your desired AMI ID
   instance_type = "t2.micro"  # Replace with your desired instance type
@@ -185,5 +185,5 @@ resource "aws_instance" "terraform32" {
     Name = "terrafor32"  # Change this to the desired instance name
   }
 }
-
+*/
 

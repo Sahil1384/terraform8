@@ -157,7 +157,7 @@ resource "aws_route_table_association" "private" {
 
 resource "taws_key_pair" "terraform-key" {
   key_name   = "terraform-key"  # Change this to your desired key pair name
-  public_key = file("~/.ssh/terraform-key.pub")  # Path to your public key file
+  public_key = file("C:\\Sahil Thakur\\terraform-key.pem")  # Path to your public key file
   tags = {
     Name = "terraform-key"
   }

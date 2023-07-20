@@ -69,12 +69,6 @@ resource "aws_nat_gateway" "nat-gw" {
 resource "aws_eip" "elastic_ip" {
   depends_on = [aws_internet_gateway.terraform-igw]
 }
-#internet gateway attachment 
-/*resource "aws_internet_gateway_attachment" "terraform-igw-jass" {
- internet_gateway_id = aws_internet_gateway.terraform-igw.id
-  vpc_id              = aws_vpc.terraform.id
-}*/
-
 
 #aws security group
 
@@ -117,9 +111,7 @@ resource "aws_route_table" "public" {
     #The cidr block of the route
     cidr_block = "0.0.0.0/0"
     #identifier of vpc internet gateway 
-    gateway_id = aws_internet_gateway.terraform-igw.id
-
-    
+    gateway_id = aws_internet_gateway.terraform-igw.id    
   }
 
    
@@ -161,13 +153,28 @@ resource "aws_route_table_association" "private" {
   route_table_id = aws_route_table.private.id
 }
 
+#aws key-pair
+
+resource "taws_key_pair" "terraform-key" {
+  key_name   = "terraform-key"  # Change this to your desired key pair name
+  public_key = file("~/.ssh/terraform-key.pub")  # Path to your public key file
+  tags = {
+    Name = "terraform-key"
+  }
+}
 
 # aws instance 
-/*
+
 resource "aws_instance" "terraform32" {
   ami           = "ami-04823729c75214919"  # Replace with your desired AMI ID
   instance_type = "t2.micro"  # Replace with your desired instance type
   subnet_id     = aws_subnet.terraform.id
+  key_name      = aws_key_pair.terraform-key.key_name
+ 
   security_group_ids = aws_security_group.terraform_grp.id
+   tags = {
+    Name = "terrafor32"  # Change this to the desired instance name
+  }
 }
-*/
+
+

@@ -1,19 +1,26 @@
 #provider
 terraform {
+backend "remote" {
+  organization = "Sahil-terraform"
+  workspaces {
+    name = "terraform8"
+  }
+}
+
+
+  required_version = "~>1.4"
   required_providers {
     aws = {
       source = "hashicorp/aws"
-      version = "5.8.0"
+      version = "~> 4.16"
     }
   }
 }
 
 # Configure the AWS Provider
 provider "aws" {
-  region = "us-east-1"  # Change this to your desired region
+  region = "us-east-1"
 }
-# Configure the AWS Provider
-
 
 #aws vpc creation
 

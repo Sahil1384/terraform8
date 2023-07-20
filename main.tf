@@ -11,7 +11,7 @@ backend "remote" {
  
   required_providers {
     aws = {
-      source = "hashicorp/aws"
+      source = "hashicorp/taws"
       version = "5.8.0"
     }
   }

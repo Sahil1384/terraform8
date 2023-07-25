@@ -148,7 +148,7 @@ resource "aws_route_table" "private" {
   }
 }
 
-#route table association
+#route table association for public
 
 resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.terraform23.id
@@ -163,27 +163,28 @@ resource "aws_route_table_association" "private" {
 }
 
 #aws key-pair
-
+/*
 resource "aws_key_pair" "terraform-key" {
   key_name   = "terraform-key"  # Change this to your desired key pair name
-  public_key = file("C:\\Sahil Thakur\\terraform-key.pem")  # Path to your public key file
+
   tags = {
     Name = "terraform-key"
   }
 }
+*/
 
 # aws instance 
-/*
+
 resource "aws_instance" "terraform32" {
   ami           = "ami-04823729c75214919"  # Replace with your desired AMI ID
-  instance_type = "t2.micro"  # Replace with your desired instance type
+  instance_type = var.instance-type  # Replace with your desired instance type
   subnet_id     = aws_subnet.terraform.id
-  key_name      = aws_key_pair.terraform-key.key_name
+  key_name      = var.key-pair
  
   security_group_ids = aws_security_group.terraform_grp.id
    tags = {
     Name = "terrafor32"  # Change this to the desired instance name
   }
 }
-*/
+
 

@@ -5,7 +5,7 @@ variable "instance-type" {
 
 variable "key-name" {
   
-  default = "sahilkey.pem"
+  default = "sahilkey"
 }
 
 

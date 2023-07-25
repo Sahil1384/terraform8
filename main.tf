@@ -180,8 +180,7 @@ resource "aws_instance" "terraform32" {
   instance_type = var.instance-type  # Replace with your desired instance type
   subnet_id     = aws_subnet.terraform23.id
   key_name      = var.key-name
- 
-  security_group_ids = aws_security_group.terraform_grp.id
+  security_group_id = aws_security_group.terraform_grp.id
    tags = {
     Name = "terrafor32"  # Change this to the desired instance name
   }

@@ -179,7 +179,7 @@ resource "aws_instance" "terraform32" {
   ami           = "ami-04823729c75214919"  # Replace with your desired AMI ID
   instance_type = var.instance-type  # Replace with your desired instance type
   subnet_id     = aws_subnet.terraform23.id
-  key_name      = var.key-pair
+  key_name      = var.key-name
  
   security_group_ids = aws_security_group.terraform_grp.id
    tags = {

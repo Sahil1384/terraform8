@@ -214,6 +214,6 @@ resource "aws_db_instance" "sahil-rds" {
   identifier           = "mydatabase"
   username             = "sahil"
   password             = "sahil321"
-  parameter_group_name = "default.mysql"
+  #parameter_group_name = "default.mysql"
   skip_final_snapshot  = true
 }

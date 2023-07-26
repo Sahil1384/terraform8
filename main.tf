@@ -194,11 +194,22 @@ resource "aws_s3_bucket" "sahil-s3" {
     Environment = "Dev"
   }
 }
+/*
+resource "aws_db_subnet_group" "terraform-sb-grp" {
+  name         = "terraform-sb-grp"
+  subnet_ids   = ["${aws_subnet.frontend.id}", "${aws_subnet.backend.id}"]
+
+  tags = {
+    Name        = "terraform-sb-grp"
+  }
+}
+
+*/
 
 resource "aws_db_instance" "sahil-rds" {
   allocated_storage    = 10
   engine               = "MariaDB"
-  engine_version       = "MariaDB 10.6.14"
+  engine_version       = "MariaDB 10.6.12"
   instance_class       = "db.t3.micro"
   identifier           = "mydatabase"
   username             = "sahil"

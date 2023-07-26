@@ -209,7 +209,7 @@ resource "aws_db_subnet_group" "terraform-sb-grp" {
 resource "aws_db_instance" "sahil-rds" {
   allocated_storage    = 10
   engine               = "MariaDB"
-  engine_version       = "MariaDB 10.6.12"
+  engine_version       = "MariaDB 10.6.14"
   instance_class       = "db.t3.micro"
   identifier           = "mydatabase"
   username             = "sahil"

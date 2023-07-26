@@ -195,3 +195,15 @@ resource "aws_s3_bucket" "sahil-s3" {
   }
 }
 
+resource "aws_db_instance" "sahil-rds" {
+  Storage_type          = "General Purpose SSD (gp2)"
+  allocated_storage    = 20
+  engine               = "MariaDB"
+  engine_version       = "MariaDB 10.6.14"
+  instance_class       = "db.t3.micro"
+  name                 = "mydatabase"
+  username             = "sahil"
+  password             = "sahil123"
+  parameter_group_name = "default.mariadb"
+  skip_final_snapshot  = true
+}

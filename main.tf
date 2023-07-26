@@ -186,4 +186,12 @@ resource "aws_instance" "terraform32" {
   }
 }
 
+resource "aws_s3_bucket" "sahil-s3" {
+  bucket = "sahil-tf-test-bucket"
+
+  tags = {
+    Name        = "My bucket"
+    Environment = "Dev"
+  }
+}
 

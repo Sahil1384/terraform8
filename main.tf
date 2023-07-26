@@ -200,9 +200,9 @@ resource "aws_db_instance" "sahil-rds" {
   engine               = "MariaDB"
   engine_version       = "MariaDB 10.6.14"
   instance_class       = "db.t3.micro"
-  name                 = "mydb"
+  identifier           = "mydatabase"
   username             = "sahil"
   password             = "sahil123"
-  parameter_group_name = "default.mysql5.7"
+  parameter_group_name = "default.mysql"
   skip_final_snapshot  = true
 }

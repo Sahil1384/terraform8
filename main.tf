@@ -213,7 +213,7 @@ resource "aws_db_instance" "sahil-rds" {
   instance_class       = "db.t3.micro"
   identifier           = "mydatabase"
   username             = "sahil"
-  password             = "sahil123"
+  password             = "sahil321"
   parameter_group_name = "default.mysql"
   skip_final_snapshot  = true
 }

@@ -360,15 +360,17 @@ resource "aws_security_group" "loadbalancer-sg" {
 #listner for load balncer
 
 resource "aws_alb_listener" "listener-alb" {
-  load_balancer_ids = aws_alb.test-loadbalacer.id
+ # load_balancer_ids = aws_alb.test-loadbalacer.id
   port              = 80
   protocol          = "HTTP"
-
+/*
   default_action {
     target_group_id = aws_alb_target_group.target-group.id
     type             = "forward"
   }
+  */
 }
+
 #target  group for load-balancer
 
 resource "aws_alb_target_group" "target-group" {

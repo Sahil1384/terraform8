@@ -150,7 +150,7 @@ resource "aws_route_table" "private" {
 #route table subnet association for public
 
 resource "aws_route_table_association" "public" {
-  subnet_id      = aws_subnet.public-subet.id
+  subnet_id      = aws_subnet.public-subnet.id
   route_table_id = aws_route_table.public.id
 }
 
@@ -229,8 +229,8 @@ resource "aws_s3_bucket" "sahil-s3" {
 }
 #RDS_subnet group creation
 
-resource "aws_db_subnet_group" "RDS-subnetgrp" {
-  name         = "RDS-subnetgrp"
+resource "aws_db_subnet_group" "rds-subnetgrp" {
+  name         = "rds-subnetgrp"
   subnet_ids = [
     aws_subnet.private-subnet.id,
     #aws_subnet.example_subnet_2.id,
@@ -238,7 +238,7 @@ resource "aws_db_subnet_group" "RDS-subnetgrp" {
   ]
 
   tags = {
-    Name        = "RDS-subnetgrp"
+    Name        = "rds-subnetgrp"
   }
 }
 
@@ -255,7 +255,7 @@ resource "aws_db_instance" "sahil-rds" {
   username               = "sahil"
   password               = "sahil321"
   vpc_security_group_ids = aws_security_group.rds-securitygrp
-  aws_db_subnet_group    = "RDS-subnetgrp"
+  aws_db_subnet_group    = "rds-subnetgrp"
   skip_final_snapshot    = true
 }
 

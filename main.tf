@@ -312,7 +312,7 @@ resource "aws_lb" "test-loadbalacer" {
   enable_deletion_protection = true
 
   access_logs {
-    bucket  = aws_s3_bucket.lb_logs.id
+    bucket  = aws_s3_bucket.sahil-s3.id
     prefix  = "test-lb"
     enabled = true
   }
@@ -346,9 +346,6 @@ resource "aws_security_group" "loadbalancer-sg" {
    }
 
   egress {
-
-
-    
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
@@ -363,12 +360,12 @@ resource "aws_security_group" "loadbalancer-sg" {
 #listner for load balncer
 
 resource "aws_alb_listener" "listener-alb" {
-  load_balancer_arn = aws_alb.test-loadbalacer.arn
+  load_balancer_ids = aws_alb.test-loadbalacer.id
   port              = 80
   protocol          = "HTTP"
 
   default_action {
-    target_group_arn = aws_alb_target_group.target-group.arn
+    target_group_id = aws_alb_target_group.target-group.id
     type             = "forward"
   }
 }

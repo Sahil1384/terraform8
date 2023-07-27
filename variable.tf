@@ -8,4 +8,8 @@ variable "key-name" {
   default = "sahilkey"
 }
 
+variable "aws_subnet" {
+  
+  default = "public-subnet"
+}
 

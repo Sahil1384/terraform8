@@ -8,7 +8,6 @@ backend "remote" {
 }
 
 
- 
   required_providers {
     aws = {
       source = "hashicorp/aws"
@@ -24,7 +23,7 @@ provider "aws" {
 
 #aws vpc creation
 
-resource "aws_vpc" "terraform" {
+resource "aws_vpc" "vpc" {
   cidr_block = "10.0.0.0/16"
    tags = {
     Name = "terraform_vpc"
@@ -34,28 +33,28 @@ resource "aws_vpc" "terraform" {
 
 # aws subnet creation
 
-resource "aws_subnet" "terraform23" {
+resource "aws_subnet" "public-subnet" {
   vpc_id     = aws_vpc.terraform.id
   cidr_block = "10.0.0.0/24"
 
   tags = {
-    Name = "terraform_sub"
+    Name = "public-subnet"
   }
 }
 
-resource "aws_subnet" "terraform24" {
-  vpc_id     = aws_vpc.terraform.id
+resource "aws_subnet" "private-subnet" {
+  vpc_id     = aws_vpc.vpc.id
   cidr_block = "10.0.1.0/24"
 
   tags = {
-    Name = "terraform-prvt-subnet"
+    Name = "private-subnet"
   }
 }
 
 #aws internet-gateway
 
 resource "aws_internet_gateway" "terraform-igw" {
-  vpc_id = aws_vpc.terraform.id
+  vpc_id = aws_vpc.vpc.id
 
   tags = {
     Name = "terraform-igw"
@@ -67,7 +66,7 @@ resource "aws_nat_gateway" "nat-gw" {
   #the allocation id of elastic ip address for the gateway. 
   allocation_id = aws_eip.elastic_ip.id
   #the subnet id of the subnet in which to place the gateway.
-  subnet_id     = aws_subnet.terraform23.id
+  subnet_id     = aws_subnet.public-subnet.id
 
   tags = {
     Name = "NAT-gw"
@@ -79,12 +78,12 @@ resource "aws_eip" "elastic_ip" {
   depends_on = [aws_internet_gateway.terraform-igw]
 }
 
-#aws security group
+#aws vpc security group
 
-resource "aws_security_group" "terraform_grp" {
-  name        = "terraform_grp"
+resource "aws_security_group" "vpc-secgrp" {
+  name        = "vpc-secgrp"
   description = "for testing using terraform"
-  vpc_id      = aws_vpc.terraform.id
+  vpc_id      = aws_vpc.vpc.id
 
    ingress {
     from_port   = 22
@@ -108,13 +107,13 @@ resource "aws_security_group" "terraform_grp" {
   }
 
   tags = {
-    Name = "allow_this"
+    Name = "vpc-secgrp"
   }
 }
 
 resource "aws_route_table" "public" {
   #The vpc id.
-  vpc_id = aws_vpc.terraform.id
+  vpc_id = aws_vpc.vpc.id
 
   route {
     #The cidr block of the route
@@ -131,7 +130,7 @@ resource "aws_route_table" "public" {
 
 resource "aws_route_table" "private" {
   #The vpc id.
-  vpc_id = aws_vpc.terraform.id
+  vpc_id = aws_vpc.vpc.id
 
   route {
     #The cidr block of the route
@@ -148,17 +147,17 @@ resource "aws_route_table" "private" {
   }
 }
 
-#route table association for public
+#route table subnet association for public
 
 resource "aws_route_table_association" "public" {
-  subnet_id      = aws_subnet.terraform23.id
+  subnet_id      = aws_subnet.public-subet.id
   route_table_id = aws_route_table.public.id
 }
 
-#route table association for private 
+#route table subnet association for private 
 
 resource "aws_route_table_association" "private" {
-  subnet_id      = aws_subnet.terraform24.id
+  subnet_id      = aws_subnet.private-subnet.id
   route_table_id = aws_route_table.private.id
 }
 
@@ -175,16 +174,50 @@ resource "aws_key_pair" "terraform-key" {
 
 # aws instance 
 
-resource "aws_instance" "terraform32" {
+resource "aws_instance" "instance" {
   ami           = "ami-04823729c75214919"  # Replace with your desired AMI ID
   instance_type = var.instance-type  # Replace with your desired instance type
-  subnet_id     = aws_subnet.terraform23.id
+  subnet_id     = aws_subnet.public.id
   key_name      = var.key-name
-   vpc_security_group_ids = [aws_security_group.terraform_grp.id]  # Use the correct argument name here
+  vpc_security_group_ids = [aws_security_group.instance-secgrp.id]  # Use the correct argument name here
    tags = {
     Name = "terrafor32"  # Change this to the desired instance name
   }
 }
+#aws instance security group
+
+resource "aws_security_group" "instance-secgrp" {
+  name        = "instance-secgrp"
+  description = "for testing using terraform"
+  vpc_id      = aws_vpc.vpc.id
+
+   ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+   }
+
+   ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+   }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "vpc-secgrp"
+  }
+}
+
+# S3 creation
 
 resource "aws_s3_bucket" "sahil-s3" {
   bucket = "sahil-tf-test-bucket"
@@ -194,26 +227,76 @@ resource "aws_s3_bucket" "sahil-s3" {
     Environment = "Dev"
   }
 }
-/*
-resource "aws_db_subnet_group" "terraform-sb-grp" {
-  name         = "terraform-sb-grp"
-  subnet_ids   = ["${aws_subnet.frontend.id}", "${aws_subnet.backend.id}"]
+#RDS_subnet group creation
+
+resource "aws_db_subnet_group" "RDS-subnetgrp" {
+  name         = "RDS-subnetgrp"
+  subnet_ids = [
+    aws_subnet.private-subnet.id,
+    #aws_subnet.example_subnet_2.id,
+    # Add more subnet IDs if you have additional subnets in your VPC
+  ]
 
   tags = {
-    Name        = "terraform-sb-grp"
+    Name        = "RDS-subnetgrp"
   }
 }
 
-*/
+
+#aws RDS creation
 
 resource "aws_db_instance" "sahil-rds" {
-  allocated_storage    = 10
-  engine               = "MariaDB"
-  engine_version       = "10.6.14"
-  instance_class       = "db.t3.micro"
-  identifier           = "mydatabase"
-  username             = "sahil"
-  password             = "sahil321"
-  #parameter_group_name = "default.mysql"
-  skip_final_snapshot  = true
+  vpc_id                 = aws_vpc.vpc.id
+  allocated_storage      = 10
+  engine                 = "MariaDB"
+  engine_version         = "10.6.14"
+  instance_class         = "db.t3.micro"
+  identifier             = "mydatabase"
+  username               = "sahil"
+  password               = "sahil321"
+  vpc_security_group_ids = aws_security_group.rds-securitygrp
+  aws_db_subnet_group    = "RDS-subnetgrp"
+  skip_final_snapshot    = true
 }
+
+#aws_rds_security_group
+
+resource "aws_security_group" "rds-securitygrp" {
+  name        = "rds-securitygrp"
+  description = "for testing using terraform"
+  vpc_id      = aws_vpc.vpc.id
+
+
+   ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+   }
+
+    ingress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+   }
+
+   ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+   }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "rds-securitygrp"
+  }
+}
+

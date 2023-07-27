@@ -356,19 +356,20 @@ resource "aws_security_group" "loadbalancer-sg" {
     Name = "loadbalancer-sg"
   }
 }
-
-#listner for load balncer
-
-resource "aws_alb_listener" "listener-alb" {
- load_balancer_ids = aws_alb.test-loadbalacer.id
+# Create an ALB listener
+resource "aws_lb_listener" "example_listener" {
+  load_balancer_arn = aws_lb.test-loadbalacer.arn  # This is the corrected line, referencing the ALB ARN
   port              = 80
   protocol          = "HTTP"
 
   default_action {
-    target_group_id = aws_alb_target_group.target-group.id
-    type             = "forward"
+    type             = "fixed-response"
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "Hello from the ALB!"
+      status_code  = "200"
+    }
   }
-
 }
 
 #target  group for load-balancer

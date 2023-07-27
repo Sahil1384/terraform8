@@ -26,7 +26,7 @@ provider "aws" {
 resource "aws_vpc" "vpc" {
   cidr_block = "10.0.0.0/16"
    tags = {
-    Name = "terraform_vpc"
+    Name = "vpc"
   }
 }
 
@@ -302,3 +302,81 @@ resource "aws_security_group" "rds-securitygrp" {
   }
 }
 
+#application load balancer
+
+resource "aws_lb" "test-loadbalacer" {
+  name               = "test-loadbalancer"
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.loadbalancer-sg.id]
+  subnets            = [aws_subnet.public-subnet.id, aws_subnet.private-subnet]
+  enable_deletion_protection = true
+
+  access_logs {
+    bucket  = aws_s3_bucket.lb_logs.id
+    prefix  = "test-lb"
+    enabled = true
+  }
+
+  tags = {
+    Environment = "production"
+  }
+}
+
+#aws_rds_security_group
+
+resource "aws_security_group" "loadbalancer-sg" {
+  name        = "loadbalancer-sg"
+  description = "for testing using terraform"
+  vpc_id      = aws_vpc.vpc.id
+
+
+   ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+   }
+
+    
+   ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+   }
+
+  egress {
+
+
+    
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "loadbalancer-sg"
+  }
+}
+
+#listner for load balncer
+
+resource "aws_alb_listener" "listener-alb" {
+  load_balancer_arn = aws_alb.test-loadbalacer.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    target_group_arn = aws_alb_target_group.target-group.arn
+    type             = "forward"
+  }
+}
+#target  group for load-balancer
+
+resource "aws_alb_target_group" "target-group" {
+  name     = "target-group"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.vpc.id
+}

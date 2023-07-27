@@ -234,7 +234,7 @@ resource "aws_db_subnet_group" "rds-subnetgrp" {
   description      =  "for testing"
   subnet_ids       = [
     aws_subnet.private-subnet.id,
-    #aws_subnet.example_subnet_2.id,
+    aws_subnet.public-subnet.id
     # Add more subnet IDs if you have additional subnets in your VPC
   ]
 

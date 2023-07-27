@@ -247,7 +247,7 @@ resource "aws_db_subnet_group" "rds-subnetgrp" {
 #aws RDS creation
 
 resource "aws_db_instance" "sahil-rds" {
-  vpc_id                 = aws_vpc.vpc.id
+  vpc_id      = aws_vpc.vpc.id
   allocated_storage      = 10
   engine                 = "MariaDB"
   engine_version         = "10.6.14"
@@ -256,7 +256,8 @@ resource "aws_db_instance" "sahil-rds" {
   username               = "sahil"
   password               = "sahil321"
   vpc_security_group_ids = aws_security_group.rds-securitygrp.id
-  aws_db_subnet_group    = "rds-subnetgrp"
+  subnet_group_name = aws_db_subnet_group.rds-subnetgrp.name
+
   skip_final_snapshot    = true
 }
 

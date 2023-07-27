@@ -255,7 +255,7 @@ resource "aws_db_instance" "sahil-rds" {
   identifier             = "mydatabase"
   username               = "sahil"
   password               = "sahil321"
-  vpc_security_group_ids = aws_security_group.rds-securitygrp.id
+  vpc_security_group_ids = [aws_security_group.rds-securitygrp.id]
   db_subnet_group_name   = aws_db_subnet_group.rds-subnetgrp.name
 
   skip_final_snapshot    = true

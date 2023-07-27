@@ -231,7 +231,6 @@ resource "aws_s3_bucket" "sahil-s3" {
 
 resource "aws_db_subnet_group" "rds-subnetgrp" {
   name             = "rds-subnetgrp"
-  region = "us-east-1"
   description      =  "for testing"
   subnet_ids       = [
     aws_subnet.private-subnet.id,

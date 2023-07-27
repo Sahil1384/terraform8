@@ -230,8 +230,9 @@ resource "aws_s3_bucket" "sahil-s3" {
 #RDS_subnet group creation
 
 resource "aws_db_subnet_group" "rds-subnetgrp" {
-  name         = "rds-subnetgrp"
-  subnet_ids = [
+  name             = "rds-subnetgrp"
+  description      =  "for testing"
+  subnet_ids       = [
     aws_subnet.private-subnet.id,
     #aws_subnet.example_subnet_2.id,
     # Add more subnet IDs if you have additional subnets in your VPC
@@ -254,7 +255,7 @@ resource "aws_db_instance" "sahil-rds" {
   identifier             = "mydatabase"
   username               = "sahil"
   password               = "sahil321"
-  vpc_security_group_ids = aws_security_group.rds-securitygrp
+  vpc_security_group_ids = aws_security_group.rds-securitygrp.id
   aws_db_subnet_group    = "rds-subnetgrp"
   skip_final_snapshot    = true
 }

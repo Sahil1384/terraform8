@@ -181,7 +181,7 @@ resource "aws_instance" "instance" {
   key_name      = var.key-name
   vpc_security_group_ids = [aws_security_group.instance-secgrp.id]  # Use the correct argument name here
    tags = {
-    Name = "terrafor32"  # Change this to the desired instance name
+    Name = "instance"  # Change this to the desired instance name
   }
 }
 #aws instance security group
@@ -231,6 +231,7 @@ resource "aws_s3_bucket" "sahil-s3" {
 
 resource "aws_db_subnet_group" "rds-subnetgrp" {
   name             = "rds-subnetgrp"
+  region = "us-east-1"
   description      =  "for testing"
   subnet_ids       = [
     aws_subnet.private-subnet.id,

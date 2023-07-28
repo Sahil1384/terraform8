@@ -35,7 +35,7 @@ resource "aws_vpc" "vpc" {
 
 resource "aws_subnet" "public-subnet" {
   vpc_id     = aws_vpc.vpc.id
-  cidr_block = var.cidr_block
+  for_each = toset(var.cidr_block)
 
   tags = {
     Name = "public-subnet"

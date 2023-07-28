@@ -362,7 +362,7 @@ resource "aws_lb_listener" "example_listener" {
 
 #target  group for load-balancer
 
-resource "aws_alb_target_group" "target-group" {
+resource "aws_lb_target_group" "target-group" {
   name     = "target-group"
   port     = 80
   protocol = "HTTP"

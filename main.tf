@@ -308,18 +308,9 @@ resource "aws_lb" "test-loadbalacer" {
   name               = "test-loadbalancer"
   load_balancer_type = "application"
   security_groups    = [aws_security_group.loadbalancer-sg.id]
-  subnets            = [aws_subnet.public-subnet.id, aws_subnet.private-subnet.id]
+  subnets            = [aws_subnet.public-subnet.id]
   enable_deletion_protection = true
 
-  access_logs {
-    bucket  = aws_s3_bucket.sahil-s3.id
-    prefix  = "test-lb"
-    enabled = true
-  }
-
-  tags = {
-    Environment = "dev"
-  }
 }
 
 #aws_rds_security_group
@@ -362,13 +353,10 @@ resource "aws_lb_listener" "example_listener" {
   port              = 80
   protocol          = "HTTP"
 
-  default_action {
-    type             = "fixed-response"
-    fixed_response {
-      content_type = "text/plain"
-      message_body = "Hello from the ALB!"
-      status_code  = "200"
-    }
+   default_action {
+    type = "forward"
+
+    target_group_arn = aws_lb_target_group.target-group.arn
   }
 }
 

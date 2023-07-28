@@ -318,7 +318,7 @@ resource "aws_lb" "test-loadbalacer" {
   }
 
   tags = {
-    Environment = "production"
+    Environment = "dev"
   }
 }
 
@@ -357,7 +357,7 @@ resource "aws_security_group" "loadbalancer-sg" {
   }
 }
 # Create an ALB listener
-resource "aws_lb_listener" "example_listener" {
+resource "aws_lb_listener" "listner" {
   load_balancer_arn = aws_lb.test-loadbalacer.arn  # This is the corrected line, referencing the ALB ARN
   port              = 80
   protocol          = "HTTP"

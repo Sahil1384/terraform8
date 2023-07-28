@@ -35,7 +35,9 @@ resource "aws_vpc" "vpc" {
 
 resource "aws_subnet" "public-subnet" {
   vpc_id     = aws_vpc.vpc.id
-  cidr_block = "10.0.0.0/24"
+  count = 2
+
+  cidr_block = "10.0.1.${count.index + 0}/24"
 
   tags = {
     Name = "public-subnet"
@@ -44,7 +46,9 @@ resource "aws_subnet" "public-subnet" {
 
 resource "aws_subnet" "private-subnet" {
   vpc_id     = aws_vpc.vpc.id
-  cidr_block = "10.0.1.0/24"
+  count = 2
+
+  cidr_block = "10.0.1.${count.index + 2}/24"
 
   tags = {
     Name = "private-subnet"
@@ -308,7 +312,7 @@ resource "aws_lb" "test-loadbalacer" {
   name               = "test-loadbalancer"
   load_balancer_type = "application"
   security_groups    = [aws_security_group.loadbalancer-sg.id]
-  subnets            = [aws_subnet.public-subnet.id]
+  subnets            = [aws_subnet.public-subnet.*.id]
   enable_deletion_protection = true
 
 }

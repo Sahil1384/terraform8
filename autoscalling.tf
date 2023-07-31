@@ -7,3 +7,15 @@ resource "aws_launch_configuration" "launch-configuration" {
   #iam_instance_profile = aws_iam_instance_profile.example.name
 }
 
+resource "aws_autoscaling_group" "instance-asg" {
+  name                 = "instance-asg"
+  launch_configuration = aws_launch_configuration.launch-configuration.id
+  min_size             = 1
+  max_size             = 2
+  desired_capacity     = 1
+  health_check_type    = "EC2"
+
+  vpc_zone_identifier = [aws_subnet.public-subnet.id]  # Change this to the desired subnet ID
+
+ 
+}

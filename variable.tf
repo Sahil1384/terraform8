@@ -14,6 +14,6 @@ variable "aws_subnet" {
 }
 
 variable "aws_security_group" {
-  type    = list(string)
+  type    = string
   default = "instance-secgrp"
 }

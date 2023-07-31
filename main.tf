@@ -42,6 +42,16 @@ resource "aws_subnet" "public-subnet" {
   }
 }
 
+resource "aws_subnet" "public22-subnet" {
+  vpc_id     = aws_vpc.vpc.id
+  cidr_block = "10.0.4.0/24"
+
+  tags = {
+    Name = "public22-subnet"
+  }
+}
+
+
 resource "aws_subnet" "private-subnet" {
   vpc_id     = aws_vpc.vpc.id
   cidr_block =  "10.0.3.0/24"
@@ -187,7 +197,7 @@ resource "aws_db_subnet_group" "rds-subnetgrp" {
   name             = "rds-subnetgrp"
   description      =  "for testing"
   subnet_ids       = [
-    aws_subnet.private-subnet.id,
+    aws_subnet.public22-subnet.id,
     aws_subnet.public-subnet.id
     # Add more subnet IDs if you have additional subnets in your VPC
   ]
@@ -267,6 +277,7 @@ resource "aws_lb" "test-loadbalacer" {
     aws_subnet.private-subnet.id,
     aws_subnet.public-subnet.id
   ]
+
   enable_deletion_protection = true
 
 }

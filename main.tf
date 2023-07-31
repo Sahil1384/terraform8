@@ -263,7 +263,7 @@ resource "aws_lb" "test-loadbalacer" {
   name               = "test-loadbalancer"
   load_balancer_type = "application"
   security_groups    = [aws_security_group.loadbalancer-sg.id]
-  subnets            = [aws_subnet.public-subnet.id]
+  subnets            = [aws_subnet.public-subnet.id, aws_subnet.private-subnet ]
   enable_deletion_protection = true
 
 }

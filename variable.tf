@@ -14,6 +14,6 @@ variable "aws_subnet" {
 }
 
 variable "aws_security_group" {
-  
+  type    ="string"
   default = "instance-secgrp"
 }

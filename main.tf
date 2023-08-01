@@ -278,7 +278,7 @@ resource "aws_lb" "test-loadbalacer" {
     aws_subnet.public-subnet.id
   ]
 
-  enable_deletion_protection = true
+  
 
 }
 

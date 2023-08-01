@@ -6,6 +6,13 @@ resource "aws_instance" "instance" {
   subnet_id     = aws_subnet.public-subnet.id
   key_name      = var.key-name
   vpc_security_group_ids = [aws_security_group.instance-secgrp.id]  # Use the correct argument name here
+   user_data = <<-EOT
+              #!/bin/bash
+              sudo yum update -y
+              sudo yum install -y httpd
+              sudo service httpd start
+              sudo chkconfig httpd on
+              EOT
    tags = {
     Name = "instance"  # Change this to the desired instance name
   }
@@ -40,6 +47,6 @@ resource "aws_security_group" "instance-secgrp" {
   }
 
   tags = {
-    Name = "vpc-secgrp"
+    Name = "instance-secgrp"
   }
 }

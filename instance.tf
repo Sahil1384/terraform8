@@ -5,6 +5,7 @@ resource "aws_instance" "instance" {
   instance_type = var.instance-type  # Replace with your desired instance type
   subnet_id     = aws_subnet.public-subnet.id
   key_name      = var.key-name
+   associate_public_ip_address = true  # Enable public IP for the instance
   vpc_security_group_ids = [aws_security_group.instance-secgrp.id]  # Use the correct argument name here
    user_data = <<-EOT
               #!/bin/bash

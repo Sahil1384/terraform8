@@ -16,6 +16,9 @@ resource "aws_autoscaling_group" "instance-asg" {
   health_check_type    = "EC2"
 
   vpc_zone_identifier = [aws_subnet.public-subnet.id]  # Change this to the desired subnet ID
-
+tags = {
+    Name = "istance-img"  # Change this to the desired instance name
+  }
  
 }
+
